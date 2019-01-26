@@ -7,16 +7,21 @@ interface Validator {
 
 contract Bank is Validator {
     uint private value = 10;
-    
+    address private owner;
     constructor(uint amount) public {
         value = amount;
+        owner = msg.sender;
     }
     
+    modifier owerFunc  {
+        require(owner == msg.sender);
+        _;
+    }
     function deposit(uint amount) public {
         value += amount;
     }
     
-    function withdraw(uint amount) public {
+    function withdraw(uint amount) owerFunc public {
         if (checkValue(amount))
             value -= amount;
     }
@@ -57,5 +62,23 @@ contract MyFirstContract is Bank(20) {
     
     function setAge(uint _age) public {
         age = _age;
+    }
+}
+
+contract MyErrorHandle {
+    function testAssert() public {
+        assert(1 == 2);
+    }
+    
+    function testRequire() public {
+        require(1 == 2);
+    }
+    
+    function testRevert() public {
+        revert();
+    }
+    
+    function testThrow() public {
+        throw;
     }
 }
